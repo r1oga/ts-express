@@ -40,6 +40,11 @@ router.get('/login', (req: Request, res: Response) => {
   `)
 })
 
+router.get('/logout', (req: Request, res: Response) => {
+  req.session = null
+  res.redirect('/')
+})
+
 router.post('/login', (req: ReqWithBody, res: Response) => {
   const { email, password } = req.body
 
