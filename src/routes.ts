@@ -1,5 +1,8 @@
 import { Response, Request, Router } from 'express'
 
+interface ReqWithBody extends Request {
+  body: { [key: string]: string | undefined }
+}
 const router = Router()
 
 router.get('/login', (req: Request, res: Response) => {
@@ -18,7 +21,7 @@ router.get('/login', (req: Request, res: Response) => {
   `)
 })
 
-router.post('/login', (req: Request, res: Response) => {
+router.post('/login', (req: ReqWithBody, res: Response) => {
   const { email, password } = req.body
 
   if (email) {
