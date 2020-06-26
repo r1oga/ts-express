@@ -1,8 +1,19 @@
-import { Response, Request, Router } from 'express'
+import { Response, Request, Router, NextFunction } from 'express'
 
 interface ReqWithBody extends Request {
   body: { [key: string]: string | undefined }
 }
+
+const requireAuth = (req: Request, res: Response, next: NextFunction): void => {
+  if (req.session?.loggedIn) {
+    next()
+    return
+  }
+
+  res.status(403)
+  res.send('Not permitted')
+}
+
 const router = Router()
 
 router.get('/', (req: Request, res: Response) => {
@@ -43,6 +54,10 @@ router.get('/login', (req: Request, res: Response) => {
 router.get('/logout', (req: Request, res: Response) => {
   req.session = null
   res.redirect('/')
+})
+
+router.get('/protected', requireAuth, (req: Request, res: Response) => {
+  res.send('Secret page')
 })
 
 router.post('/login', (req: ReqWithBody, res: Response) => {
