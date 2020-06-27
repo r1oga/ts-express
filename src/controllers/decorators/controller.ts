@@ -2,6 +2,23 @@ import 'reflect-metadata'
 import { AppRouter } from '../../AppRouter'
 import { Methods } from './Methods'
 import { MetadataKeys } from './MetadataKeys'
+import { Request, Response, RequestHandler, NextFunction } from 'express'
+
+function bodyValidators(keys: string[]): RequestHandler {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (!req.body) {
+      return res.status(422).send('Invalid request')
+    }
+
+    for (let key of keys) {
+      if (!req.body[key]) {
+        return res.status(422).send('Invalid request')
+      }
+    }
+
+    next()
+  }
+}
 
 export function controller(prefix: string) {
   return function (target: Function) {
@@ -19,8 +36,13 @@ export function controller(prefix: string) {
         Reflect.getMetadata(MetadataKeys.middleware, target.prototype, key) ||
         []
 
+      const requiredBodyProps =
+        Reflect.getMetadata(MetadataKeys.validator, target.prototype, key) || []
+
+      const validator = bodyValidators(requiredBodyProps)
+
       if (path) {
-        router[method](`${prefix}${path}`, ...middlewares, handler)
+        router[method](`${prefix}${path}`, ...middlewares, validator, handler)
       }
     }
   }

@@ -29,7 +29,7 @@ router.get('/', (req: Request, res: Response) => {
       <div>
         <h1>Home</h1>
         <div class=''>Not logged in</div>
-        <a href='/login'>Login</a>
+        <a href='/auth/login'>Login</a>
       </div>
     `)
   }
@@ -42,18 +42,6 @@ router.get('/logout', (req: Request, res: Response) => {
 
 router.get('/protected', requireAuth, (req: Request, res: Response) => {
   res.send('Secret page')
-})
-
-router.post('/login', (req: ReqWithBody, res: Response) => {
-  const { email, password } = req.body
-
-  if (email && email === 'hi@com' && password && password === 'hello') {
-    // mark as logged in
-    req.session = { loggedIn: true }
-    res.redirect('/')
-  } else {
-    res.send('Invalid email or password')
-  }
 })
 
 export { router }
