@@ -1,6 +1,7 @@
-import { Response, Request, Router, NextFunction } from 'express'
-import { get } from './decorators/routes'
-import { controller } from './decorators/controller'
+import { Response, Request } from 'express'
+// import { get } from './decorators/routes'
+// import { controller } from './decorators/controller'
+import { get, controller } from './decorators/index'
 
 @controller('/auth')
 class LoginController {
@@ -18,6 +19,6 @@ class LoginController {
       </div>
       <button>Submit</button>
   </form>
-    `)
+  `)
   }
 }
