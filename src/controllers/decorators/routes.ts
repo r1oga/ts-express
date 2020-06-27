@@ -1,12 +1,17 @@
 import 'reflect-metadata'
 import { Methods } from './Methods'
 import { MetadataKeys } from './MetadataKeys'
+import { RequestHandler } from 'express'
+
+interface HandlerDescriptor extends PropertyDescriptor {
+  value?: RequestHandler
+}
 
 // returns a decorator factory
 const routeBinder = (method: string) => (path: string) => (
   target: any,
   key: string,
-  desc: PropertyDescriptor
+  desc: HandlerDescriptor
 ) => {
   Reflect.defineMetadata(MetadataKeys.path, path, target, key)
   Reflect.defineMetadata(MetadataKeys.method, method, target, key)
