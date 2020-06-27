@@ -1,6 +1,8 @@
 import { Response, Request } from 'express'
-// import { get } from './decorators/routes'
-// import { controller } from './decorators/controller'
+/*
+Bug, this do not work
+import { get, controller } from './decorators'
+*/
 import { get, controller } from './decorators/index'
 
 @controller('/auth')

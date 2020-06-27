@@ -9,8 +9,10 @@ export function controller(prefix: string) {
     for (let key in target.prototype) {
       const handler = target.prototype[key]
       const path = Reflect.getMetadata('path', target.prototype, key)
+      const method = Reflect.getMetadata('method', target.prototype, key)
+
       if (path) {
-        router.get(`${prefix}${path}`, handler)
+        router[method](`${prefix}${path}`, handler)
       }
     }
   }
