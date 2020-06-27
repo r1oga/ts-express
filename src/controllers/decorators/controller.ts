@@ -7,12 +7,12 @@ import { Request, Response, RequestHandler, NextFunction } from 'express'
 function bodyValidators(keys: string[]): RequestHandler {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.body) {
-      return res.status(422).send('Invalid request')
+      return res.status(422).send('No request body')
     }
 
     for (let key of keys) {
       if (!req.body[key]) {
-        return res.status(422).send('Invalid request')
+        return res.status(422).send(`Missing '${key}' property in request body`)
       }
     }
 
