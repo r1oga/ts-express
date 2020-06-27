@@ -15,9 +15,12 @@ export function controller(prefix: string) {
         target.prototype,
         key
       )
+      const middlewares =
+        Reflect.getMetadata(MetadataKeys.middleware, target.prototype, key) ||
+        []
 
       if (path) {
-        router[method](`${prefix}${path}`, handler)
+        router[method](`${prefix}${path}`, ...middlewares, handler)
       }
     }
   }
